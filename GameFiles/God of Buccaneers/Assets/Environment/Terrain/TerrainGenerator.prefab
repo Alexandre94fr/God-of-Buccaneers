@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2890010160714005450
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2594584290505107079}
+  - component: {fileID: 7506202214634080801}
+  m_Layer: 0
+  m_Name: TerrainGenerator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2594584290505107079
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2890010160714005450}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7506202214634080801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2890010160714005450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 139a8d33bb58b4d4884780e745052c50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _terrainChunkPrefab: {fileID: 7897656408744986354, guid: b8173832d5f71a64fb7380cb3f49b59d,
+    type: 3}
+  _liveUpdate: 1
+  _numberOfChunks: {x: 3, y: 3}
+  _terrainOptions:
+    Seed: 666
+    IsIsland: 1
+    HasWater: 1
+    MeshSize: 30
+    VerticeSize: 255
+    HeightMultiplier: 8
+    PerlinScale: 0.1
+    OctaveCount: 8
+    Lacunarity: 0.519
+    Persistance: 0
+    WaterLevel: 0.2
+  _terrainChunkComponents: []
