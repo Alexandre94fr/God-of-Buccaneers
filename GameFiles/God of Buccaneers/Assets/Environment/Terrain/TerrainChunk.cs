@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 using static TerrainGenerator;
 
 public class TerrainChunk : MonoBehaviour
@@ -9,7 +7,7 @@ public class TerrainChunk : MonoBehaviour
     #region Variables
 
     // References
-    MeshRenderer _meshRenderer;
+    MeshRenderer _meshRenderer; // Un-used for now
     MeshFilter _meshFilter;
     #endregion
 
@@ -21,7 +19,9 @@ public class TerrainChunk : MonoBehaviour
         _meshFilter = GetComponent<MeshFilter>();
     }
 
-    public void GenerateTerrainChunk(TerrainGenerator.TerrainOptions p_terrainOptions)
+    /// <summary> Will generate a chunk (a mesh) based on the given parameters. </summary>
+    /// <param name = "p_terrainOptions"> A struct that containts all the terrain's options </param>
+    public void GenerateTerrainChunk(TerrainOptions p_terrainOptions)
     {
         // To optimize
         int verticeSize = p_terrainOptions.VerticeSize;
@@ -47,6 +47,8 @@ public class TerrainChunk : MonoBehaviour
             {
                 float spaceBetweenVertex = meshSize / (verticeSize - 1);
 
+                // Creation of the vertex (it's only a position now,
+                // it will be converted in real vertex with Unity's function SetVertices())
                 Vector3 vertex = new(
                     x * spaceBetweenVertex,
                     GetHeight(x, z, p_terrainOptions),
@@ -86,13 +88,16 @@ public class TerrainChunk : MonoBehaviour
             }
         }
 
+        // TODO: Try to move the Ocean generation into the TerrainGenerator script because all the chunks generate their own Ocean
+
+        // Creation of all the components for our water submesh (Ocean)
         if (p_terrainOptions.HasWater)
         {
-            // Creation of the 4 vertices of the water mesh
-            vertices.Add(new Vector3(0,         waterLevel, 0));
-            vertices.Add(new Vector3(meshSize,  waterLevel, 0));
-            vertices.Add(new Vector3(0,         waterLevel, meshSize));
-            vertices.Add(new Vector3(meshSize,  waterLevel, meshSize));
+            // Creation of the 4 vertices of the water submesh
+            vertices.Add(new Vector3(0,        waterLevel, 0));
+            vertices.Add(new Vector3(meshSize, waterLevel, 0));
+            vertices.Add(new Vector3(0,        waterLevel, meshSize));
+            vertices.Add(new Vector3(meshSize, waterLevel, meshSize));
 
             // Creating the first triangle
             waterTrianglePoints.Add(vertices.Count - 1);
@@ -120,7 +125,12 @@ public class TerrainChunk : MonoBehaviour
         _meshFilter.mesh = terrainMesh;
     }
 
-    float GetHeight(float p_x, float p_z, TerrainGenerator.TerrainOptions p_terrainOptions)
+    /// <summary> Will compute and return the height of a vertex (a point in a mesh) based on the given parameters. </summary>
+    /// <param name = "p_x"> The X position of the vertex in the verticeSize </param>
+    /// <param name = "p_z"> The Z position of the vertex in the verticeSize </param>
+    /// <param name = "p_terrainOptions"> A struct that containts all the terrain's options </param>
+    /// <returns> Returns the height (float value) of a vertex (a point in a mesh) </returns>
+    float GetHeight(float p_x, float p_z, TerrainOptions p_terrainOptions)
     {
         float perlinHeight = 0;
 
@@ -161,11 +171,11 @@ public class TerrainChunk : MonoBehaviour
         return perlinHeight;
     }
 
-    float GetNormalizedDistanceFromTerrainCenter(float p_x, float p_z, float p_spaceBetweenVertex, TerrainGenerator.TerrainOptions p_terrainOptions)
+    float GetNormalizedDistanceFromTerrainCenter(float p_x, float p_z, float p_spaceBetweenVertex, TerrainOptions p_terrainOptions)
     {
-        Vector2 terrainCenter = new Vector2(p_terrainOptions.MeshSize / 2, p_terrainOptions.MeshSize / 2);
+        Vector2 terrainCenter = new(p_terrainOptions.MeshSize / 2, p_terrainOptions.MeshSize / 2);
 
-        Vector2 vertexPos = new Vector2(p_x * p_spaceBetweenVertex, p_z * p_spaceBetweenVertex);
+        Vector2 vertexPos = new(p_x * p_spaceBetweenVertex, p_z * p_spaceBetweenVertex);
 
         // Computing the distance
         float distanceFromTerrainCenter = Vector2.Distance(terrainCenter, vertexPos);

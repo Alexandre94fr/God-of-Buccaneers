@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class TerrainGenerator : MonoBehaviour
 {
@@ -48,13 +46,14 @@ public class TerrainGenerator : MonoBehaviour
     [SerializeField] GameObject _terrainChunkPrefab;
 
     [Header("Debuging :")]
-    [Tooltip("BEWARE ! If this option is ON it will regenerate all the chunks every time the TerrainGenerator GameObject is modified.")]
+    [Tooltip("BEWARE CAN BE LAGGY ! If this option is ON it will regenerate all the chunks every time the TerrainGenerator script values are modified.")]
     [SerializeField] bool _liveUpdate;
 
     [Header("Map size :")]
     [SerializeField] Vector2 _numberOfChunks;
 
     // Struct
+    [Header("Terrain options :")]
     [SerializeField] TerrainOptions _terrainOptions;
 
     // Chunk management
@@ -103,18 +102,24 @@ public class TerrainGenerator : MonoBehaviour
         {
             for (int z = 0; z < _numberOfChunks.y; z++)
             {
+                // Computing the chunk position
                 Vector3 chunkPosition = new(
                     x * _terrainOptions.MeshSize + _transform.position.x,
                     0,
                     z * _terrainOptions.MeshSize + _transform.position.z
                 );
 
+                // Creation of the chunk GameObject
                 GameObject terrainChunkGameObject = Instantiate(_terrainChunkPrefab, chunkPosition, Quaternion.identity, _transform);
 
                 TerrainChunk terrainChunkComponent = terrainChunkGameObject.GetComponent<TerrainChunk>();
 
+                // Naming the chunk GameObject
+                terrainChunkGameObject.name = $"TerrainChunk ({x}x, {z}z)";
+
                 _terrainChunkComponents.Add(terrainChunkComponent);
 
+                // Generating the chunk
                 terrainChunkComponent.GenerateTerrainChunk(_terrainOptions);
             }
         }
