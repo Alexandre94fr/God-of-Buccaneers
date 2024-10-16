@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static TerrainGenerator;
+using static EnvironmentGenerator;
 
 public class TerrainChunk : MonoBehaviour
 {
@@ -20,14 +20,13 @@ public class TerrainChunk : MonoBehaviour
     }
 
     /// <summary> Will generate a chunk (a mesh) based on the given parameters. </summary>
-    /// <param name = "p_terrainOptions"> A struct that containts all the terrain's options </param>
-    public void GenerateTerrainChunk(TerrainOptions p_terrainOptions)
+    /// <param name = "p_environmentOptions"> A struct that containts all the terrain's options </param>
+    public void GenerateTerrainChunk(EnvironmentOptions p_environmentOptions)
     {
         // To optimize
-        int verticeSize = p_terrainOptions.VerticeSize;
-        float meshSize = p_terrainOptions.MeshSize;
-        float waterLevel = p_terrainOptions.WaterLevel - 0.01f;
-
+        int verticeSize = p_environmentOptions.VerticeSize;
+        float meshSize = p_environmentOptions.MeshSize;
+        float waterLevel = p_environmentOptions.WaterLevel - 0.01f;
 
         if (_meshFilter == null)
         {
@@ -51,7 +50,7 @@ public class TerrainChunk : MonoBehaviour
                 // it will be converted in real vertex with Unity's function SetVertices())
                 Vector3 vertex = new(
                     x * spaceBetweenVertex,
-                    GetHeight(x, z, p_terrainOptions),
+                    GetHeight(x, z, p_environmentOptions),
                     z * spaceBetweenVertex
                 );
 
@@ -88,27 +87,25 @@ public class TerrainChunk : MonoBehaviour
             }
         }
 
-        // TODO: Try to move the Ocean generation into the TerrainGenerator script because all the chunks generate their own Ocean
-
         // Creation of all the components for our water submesh (Ocean)
-        if (p_terrainOptions.HasWater)
-        {
-            // Creation of the 4 vertices of the water submesh
-            vertices.Add(new Vector3(0,        waterLevel, 0));
-            vertices.Add(new Vector3(meshSize, waterLevel, 0));
-            vertices.Add(new Vector3(0,        waterLevel, meshSize));
-            vertices.Add(new Vector3(meshSize, waterLevel, meshSize));
-
-            // Creating the first triangle
-            waterTrianglePoints.Add(vertices.Count - 1);
-            waterTrianglePoints.Add(vertices.Count - 3);
-            waterTrianglePoints.Add(vertices.Count - 2);
-
-            // Creating the second triangle
-            waterTrianglePoints.Add(vertices.Count - 4);
-            waterTrianglePoints.Add(vertices.Count - 2);
-            waterTrianglePoints.Add(vertices.Count - 3);
-        }
+        //if (p_environmentOptions.HasWater)
+        //{
+        //    // Creation of the 4 vertices of the water submesh
+        //    vertices.Add(new Vector3(0,        waterLevel, 0));
+        //    vertices.Add(new Vector3(meshSize, waterLevel, 0));
+        //    vertices.Add(new Vector3(0,        waterLevel, meshSize));
+        //    vertices.Add(new Vector3(meshSize, waterLevel, meshSize));
+        //
+        //    // Creating the first triangle
+        //    waterTrianglePoints.Add(vertices.Count - 1);
+        //    waterTrianglePoints.Add(vertices.Count - 3);
+        //    waterTrianglePoints.Add(vertices.Count - 2);
+        //
+        //    // Creating the second triangle
+        //    waterTrianglePoints.Add(vertices.Count - 4);
+        //    waterTrianglePoints.Add(vertices.Count - 2);
+        //    waterTrianglePoints.Add(vertices.Count - 3);
+        //}
 
         Mesh terrainMesh = new()
         {
@@ -128,15 +125,15 @@ public class TerrainChunk : MonoBehaviour
     /// <summary> Will compute and return the height of a vertex (a point in a mesh) based on the given parameters. </summary>
     /// <param name = "p_x"> The X position of the vertex in the verticeSize </param>
     /// <param name = "p_z"> The Z position of the vertex in the verticeSize </param>
-    /// <param name = "p_terrainOptions"> A struct that containts all the terrain's options </param>
+    /// <param name = "p_environmentOptions"> A struct that containts all the terrain's options </param>
     /// <returns> Returns the height (float value) of a vertex (a point in a mesh) </returns>
-    float GetHeight(float p_x, float p_z, TerrainOptions p_terrainOptions)
+    float GetHeight(float p_x, float p_z, EnvironmentOptions p_environmentOptions)
     {
         float perlinHeight = 0;
 
         float amplitude = 1;
-        float frequency = p_terrainOptions.PerlinScale;
-        float spaceBetweenVertex = p_terrainOptions.MeshSize / (p_terrainOptions.VerticeSize - 1);
+        float frequency = p_environmentOptions.PerlinScale;
+        float spaceBetweenVertex = p_environmentOptions.MeshSize / (p_environmentOptions.VerticeSize - 1);
 
         // To optimize
         Vector3 chunkWorldPosition = transform.position;
@@ -147,33 +144,36 @@ public class TerrainChunk : MonoBehaviour
             p_z * spaceBetweenVertex + chunkWorldPosition.z
         );
 
-        for (int i = 0; i < p_terrainOptions.OctaveCount; i++)
+        for (int i = 0; i < p_environmentOptions.OctaveCount; i++)
         {
             perlinHeight += Mathf.PerlinNoise(
-                worldPosition.x * frequency + p_terrainOptions.Seed,
-                worldPosition.z * frequency + p_terrainOptions.Seed
+                worldPosition.x * frequency + p_environmentOptions.Seed,
+                worldPosition.z * frequency + p_environmentOptions.Seed
             ) * amplitude;
 
-            frequency /= p_terrainOptions.Lacunarity;
-            amplitude *= p_terrainOptions.Persistance;
+            frequency /= p_environmentOptions.Lacunarity;
+            amplitude *= p_environmentOptions.Persistance;
         }
 
-        if (!p_terrainOptions.IsIsland)
-            perlinHeight *= p_terrainOptions.HeightMultiplier;
+        if (!p_environmentOptions.IsIsland)
+            perlinHeight *= p_environmentOptions.HeightMultiplier;
         else
-            perlinHeight *= p_terrainOptions.HeightMultiplier * (1 - GetNormalizedDistanceFromTerrainCenter(p_x, p_z, spaceBetweenVertex, p_terrainOptions));
+            perlinHeight *= p_environmentOptions.HeightMultiplier * (1 - GetNormalizedDistanceFromTerrainCenter(p_x, p_z, spaceBetweenVertex, p_environmentOptions));
 
-        // Smoothing the terrain
-        perlinHeight *= 2;
-        int perlinHeightInt = (int)perlinHeight;
-        perlinHeight = (float)perlinHeightInt / 2;
+        // USED TO PLACE A BREAKPOINT
+        //if (perlinHeight > 1)
+        //    return p_environmentOptions.NumberOfLayersPerUnitOfHeight;
+
+        perlinHeight = Mathf.RoundToInt(perlinHeight);
+
+        //perlinHeight /= p_environmentOptions.NumberOfLayersPerUnitOfHeight;
 
         return perlinHeight;
     }
 
-    float GetNormalizedDistanceFromTerrainCenter(float p_x, float p_z, float p_spaceBetweenVertex, TerrainOptions p_terrainOptions)
+    float GetNormalizedDistanceFromTerrainCenter(float p_x, float p_z, float p_spaceBetweenVertex, EnvironmentOptions p_environmentOptions)
     {
-        Vector2 terrainCenter = new(p_terrainOptions.MeshSize / 2, p_terrainOptions.MeshSize / 2);
+        Vector2 terrainCenter = new(p_environmentOptions.MeshSize / 2, p_environmentOptions.MeshSize / 2);
 
         Vector2 vertexPos = new(p_x * p_spaceBetweenVertex, p_z * p_spaceBetweenVertex);
 
@@ -181,7 +181,7 @@ public class TerrainChunk : MonoBehaviour
         float distanceFromTerrainCenter = Vector2.Distance(terrainCenter, vertexPos);
 
         // Returning the normalization
-        return Mathf.Clamp01(distanceFromTerrainCenter / (p_terrainOptions.MeshSize / 2));
+        return Mathf.Clamp01(distanceFromTerrainCenter / (p_environmentOptions.MeshSize / 2));
     }
     #endregion
 }
