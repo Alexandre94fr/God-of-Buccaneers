@@ -11,23 +11,33 @@ public class PlayerCameraManager : MonoBehaviour
 
     // X, Z movement axis
     [Header("Camera movement stats :")]
-    [Range(0, 25f)] [SerializeField] float _cameraMaxSpeed = 5f;
-    [Range(0, 25f)] [SerializeField] float _cameraAcceleration = 10f;
-    [Range(0, 25f)] [SerializeField] float _cameraDeceleration = 15f;
-    [Range(0, 25f)] [SerializeField] float _cameraZoomHeightSpeedMultiplicator = 10f;
+
+    [Range(0.1f, 0.5f)] [SerializeField] float _cameraMovementInputSignificanceThreshold = 0.1f;
+    [Range(0.1f, 0.5f)] [SerializeField] float _cameraVelocityThreshold = 0.1f;
+
+    [Range(0f, 25f)] [SerializeField] float _cameraMaxSpeed = 5f;
+    [Range(0f, 25f)] [SerializeField] float _cameraAcceleration = 10f;
+    [Range(0f, 25f)] [SerializeField] float _cameraDeceleration = 15f;
+    [Range(0f, 25f)] [SerializeField] float _cameraZoomHeightSpeedMultiplicator = 10f;
 
     // Zoom-in, zoom-out
     [Header("Camera zoom stats :")]
+
     [Tooltip("BEWARE ! If you want to change the value of this variable in runtime, you should zoom to the minimum, otherwise the zoom-in, zoom-out will not work correctly.")]
     [SerializeField] bool _isCameraZoomAngleFixed = true;
-    [Range(0, 25f)] [SerializeField] float _cameraZoomInStepPower = 2f;
-    [Range(0, 25f)] [SerializeField] float _cameraZoomOutStepPower = 7.5f;
-    [Range(0, 100f)] [SerializeField] float _cameraZoomMinimalHeight = 5f;
-    [Range(0, 100f)] [SerializeField] float _cameraZoomMaximalHeight = 50f;
-    [Range(0, 25f)] [SerializeField] float _cameraZoomSpeed = 2f;
+
+    [Range(0.1f, 1f)] [SerializeField] float _cameraZoomInputSignificanceThreshold = 0.1f;
+    [Range(1, 100)] [SerializeField] int _zoomInputScalingFactor = 100;
+
+    [Range(0f, 25f)] [SerializeField] float _cameraZoomInStepPower = 2f;
+    [Range(0f, 25f)] [SerializeField] float _cameraZoomOutStepPower = 7.5f;
+    [Range(0f, 100f)] [SerializeField] float _cameraZoomMinimalHeight = 5f;
+    [Range(0f, 100f)] [SerializeField] float _cameraZoomMaximalHeight = 50f;
+    [Range(0f, 25f)] [SerializeField] float _cameraZoomSpeed = 2f;
 
     // Screen edge movement
     [Header("Camera screen edge movement stats :")]
+
     [SerializeField] bool _isScreenEgdeCameraMovementEnable = true;
     [Tooltip("The factor of screen edge used to move the camera (0.05f equal 5% of the screen edge)")]
     [Range(0f, 1f)] [SerializeField] float _edgeDetectionToleranceFactor = 0.05f;
@@ -46,7 +56,14 @@ public class PlayerCameraManager : MonoBehaviour
 
     float _cameraSpeed;
 
+    Vector2 _environmentWorldSize;
+
     // References
+    Vector2 _numberOfChunks;
+    Vector2 _chunkSize;
+
+    // Object references
+    EnvironmentGenerator _environmentGenerator;
     Transform _transform;
     Transform _cameraTransform;
 
@@ -69,6 +86,13 @@ public class PlayerCameraManager : MonoBehaviour
         _cameraTransform = GetComponentInChildren<Camera>().transform;
         _transform = transform;
 
+        // Getting outside components
+        _environmentGenerator = EnvironmentGenerator.Instance;
+
+        // Getting values
+        _chunkSize = new(_environmentGenerator.EnvironmentOptions.ChunkSize, _environmentGenerator.EnvironmentOptions.ChunkSize);
+        _numberOfChunks = _environmentGenerator.NumberOfChunks;
+
         // Security
         if (_cameraTransform == null)
         {
@@ -81,6 +105,9 @@ public class PlayerCameraManager : MonoBehaviour
         _cameraTransform.LookAt(_transform);
 
         _cameraLastPosition = _transform.position;
+
+        // Compute the environment size
+        _environmentWorldSize = _chunkSize * _numberOfChunks;
     }
 
     void Update()
@@ -100,21 +127,17 @@ public class PlayerCameraManager : MonoBehaviour
 
     public void GetPlayerInputValues(Vector2 p_inputValues)
     {
-        // IN CASE IF THERE IS ROTATION SYSTEM
-
         // Converting the player's inputs into a mouvement direction from the perspective of the camera,
         // if the player look at the left (-Z axis) and press the key that make the camera move forward,
         // the camera will move to the left.
-        //Vector3 convertedInputValues = p_inputValues.x * GetCameraRight() + p_inputValues.y * GetCameraForward();
-
-        Vector3 convertedInputValues = new(p_inputValues.x, 0, p_inputValues.y);
+        Vector3 convertedInputValues = p_inputValues.x * GetCameraRight() + p_inputValues.y * GetCameraForward();
 
         // We normalize the values to avoid the camera to go faster if we press Forward movement and Right movement keys at the same time
         convertedInputValues = convertedInputValues.normalized;
 
         // We check if the squared magnitude of the received inputs is above 0.03
         // (equivalent to a magnitude of 0.3) to ensure the input is significant enough
-        if (convertedInputValues.sqrMagnitude > 0.1f)
+        if (convertedInputValues.sqrMagnitude > _cameraMovementInputSignificanceThreshold)
         {
             // We use " += " because we want to stack multiple inputs of target positions
             _targetGameObjectPosition += convertedInputValues;
@@ -128,7 +151,7 @@ public class PlayerCameraManager : MonoBehaviour
         // We get the right axis of the camera
         Vector3 cameraVectorRight = _cameraTransform.right;
 
-        cameraVectorRight = RoundVector3ToVectorIntUpwardNormalize(cameraVectorRight);
+        cameraVectorRight = RoundVector3ToVector3IntUpwardNormalized(cameraVectorRight);
 
         // We cancel all possible Y movement
         cameraVectorRight.y = 0;
@@ -141,7 +164,7 @@ public class PlayerCameraManager : MonoBehaviour
         // We get the right axis of the camera
         Vector3 cameraVectorForward = _cameraTransform.forward;
 
-        cameraVectorForward = RoundVector3ToVectorIntUpwardNormalize(cameraVectorForward);
+        cameraVectorForward = RoundVector3ToVector3IntUpwardNormalized(cameraVectorForward);
 
         // We cancel all possible Y movement
         cameraVectorForward.y = 0;
@@ -164,14 +187,14 @@ public class PlayerCameraManager : MonoBehaviour
 
     void UpdateBasePosition()
     {
-        // If the square distance left to travel is inferior than 0.1f then we slow down the movement speed to decelerate
-        if (_targetGameObjectPosition.sqrMagnitude < 0.1f)
+        // If the square distance left to travel is inferior than for exemple 0.1f then we slow down the movement speed to decelerate
+        if (_targetGameObjectPosition.sqrMagnitude < _cameraVelocityThreshold)
         {
             // Linearly interpolates the camera's horizontal velocity towards zero, using a deceleration factor (_cameraDeceleration).
             _cameraHorizontalVelocity = Vector3.Lerp(_cameraHorizontalVelocity, Vector3.zero, Time.deltaTime * _cameraDeceleration);
 
-            // ...
-            if (_cameraHorizontalVelocity.sqrMagnitude > 0.01f)
+            // If the velocity of the camera is faster than _cameraVelocityThreshold then we continue to move the camera
+            if (_cameraHorizontalVelocity.sqrMagnitude > _cameraVelocityThreshold / 10)
                 _transform.position += _cameraHorizontalVelocity * Time.deltaTime;
         }
         else
@@ -185,8 +208,22 @@ public class PlayerCameraManager : MonoBehaviour
             _transform.position += _zoomHeight / _cameraZoomHeightSpeedMultiplicator * _cameraSpeed * Time.deltaTime * _targetGameObjectPosition;
         }
 
+        HandleCameraBorder();
+
         // Resetting the target position
         _targetGameObjectPosition = Vector3.zero;
+    }
+
+    /// <summary>
+    /// Will verify if the Main camera parent's position (_transform.position) is outside of the generated terrain chunks,
+    /// if yes than he will update the (_transform.position) to the last position (_cameraLastPosition) </summary>
+    void HandleCameraBorder()
+    {
+        float positionX = _transform.position.x;
+        float positionZ = _transform.position.z;
+
+        if (positionX < 0 || positionZ < 0 || positionX > _environmentWorldSize.x || positionZ > _environmentWorldSize.y)
+            _transform.position = _cameraLastPosition;
     }
 
     void CheckMousePositionAtEdge()
@@ -216,10 +253,10 @@ public class PlayerCameraManager : MonoBehaviour
     public void ZoomCamera(float p_zoomInputValue)
     {
         // The "100" value is there to avoid a really bit changement
-        float convertedZoomInputValue = -p_zoomInputValue / 100f;
+        float convertedZoomInputValue = -p_zoomInputValue / _zoomInputScalingFactor;
 
         // Check if the absolute value (exemple : -0.5f -> 0.5f) of convertedZoomInputValue is strong enough
-        if (Mathf.Abs(convertedZoomInputValue) > 0.1f)
+        if (Mathf.Abs(convertedZoomInputValue) > _cameraZoomInputSignificanceThreshold)
         {
             _zoomHeight = _cameraTransform.localPosition.y + convertedZoomInputValue * _cameraZoomInStepPower;
 
@@ -258,7 +295,7 @@ public class PlayerCameraManager : MonoBehaviour
 
     #region - Tools -
 
-    int RoundFloatToIntUpwardNormalize(float p_float)
+    int RoundFloatToIntUpwardNormalized(float p_float)
     {
         if (p_float < 0)
             return -1;
@@ -269,12 +306,12 @@ public class PlayerCameraManager : MonoBehaviour
         return 0;
     }
 
-    Vector3 RoundVector3ToVectorIntUpwardNormalize(Vector3 p_vector3)
+    Vector3 RoundVector3ToVector3IntUpwardNormalized(Vector3 p_vector3)
     {
         return new Vector3(
-            RoundFloatToIntUpwardNormalize(p_vector3.x),
-            RoundFloatToIntUpwardNormalize(p_vector3.y),
-            RoundFloatToIntUpwardNormalize(p_vector3.z)
+            RoundFloatToIntUpwardNormalized(p_vector3.x),
+            RoundFloatToIntUpwardNormalized(p_vector3.y),
+            RoundFloatToIntUpwardNormalized(p_vector3.z)
         );
     }
     #endregion
