@@ -151,6 +151,10 @@ public class TerrainChunk : MonoBehaviour
                 worldPosition.z * frequency + p_environmentOptions.Seed
             ) * amplitude;
 
+            float heightModifier = p_environmentOptions.HeightDistribution.Evaluate(perlinHeight);
+
+            perlinHeight *= heightModifier;
+
             frequency /= p_environmentOptions.Lacunarity;
             amplitude *= p_environmentOptions.Persistance;
         }

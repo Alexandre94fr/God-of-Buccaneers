@@ -271,10 +271,10 @@ MonoBehaviour:
   _cameraDeceleration: 25
   _cameraZoomHeightSpeedMultiplicator: 10
   _isCameraZoomAngleFixed: 1
-  _cameraZoomInStepPower: 7.5
-  _cameraZoomOutStepPower: 7.5
+  _cameraZoomInStepPower: 10
+  _cameraZoomOutStepPower: 10
   _cameraZoomMinimalHeight: 15
   _cameraZoomMaximalHeight: 50
-  _cameraZoomSpeed: 2
+  _cameraZoomSpeed: 3
   _isScreenEgdeCameraMovementEnable: 1
   _edgeDetectionToleranceFactor: 0.05
