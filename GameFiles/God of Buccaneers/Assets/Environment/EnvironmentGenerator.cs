@@ -11,34 +11,26 @@ public class EnvironmentGenerator : MonoBehaviour
         // NOTE : We can't set values insind of the struct because the Unity's C# is 9.0 not 10.0
 
         [Header("Environment options :")]
-        [Range(0, 9999)]
-        public int Seed;
+        [Range(0, 9999)] public int Seed;
         public bool IsIsland;
         public bool HasWater;
 
         [Header("Mesh options :")]
-        [Range(0, 32)]
-        public float MeshSize; // 30
-        [Range(0, 255)]
-        public int VerticeSize; // 128
-        [Range(0, 32)]
-        public float HeightMultiplier; // 5
-        [Range(1, 10)]
-        public int NumberOfLayersPerUnitOfHeight; // 2
+        [Range(0, 32)] public float MeshSize; // 30
+        [Range(0, 255)] public int VerticeSize; // 128
+        [Range(0, 32)] public float HeightMultiplier; // 5
+        [Range(1, 10)] public int NumberOfLayersPerUnitOfHeight; // 2
 
         [Header("Perlin noise options :")]
-        [Range(0, 1)]
-        public float PerlinScale; // 0.03f
-        [Range(0, 10)]
-        public int OctaveCount; // 8
-        [Range(0.05f, 1)]
-        public float Lacunarity; // 0.3f
-        [Range(0, 1)]
-        public float Persistance; // 0.4f
+        [Range(0, 1)] public float PerlinScale; // 0.03f
+        [Range(0, 10)] public int OctaveCount; // 8
+        [Range(0.05f, 1)] public float Lacunarity; // 0.3f
+        [Range(0, 1)] public float Persistance; // 0.4f
+       
+        public AnimationCurve HeightDistribution; 
 
         [Header("Water options :")]
-        [Range(0, 2)]
-        public float WaterLevel; // 0.2f
+        [Range(0, 2)] [SerializeField] public float WaterLevel; // 0.2f
     }
     #endregion
 

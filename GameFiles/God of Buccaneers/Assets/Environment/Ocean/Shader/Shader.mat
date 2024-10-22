@@ -42,9 +42,11 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _CellDensity: 0.33
+    - _EdgePresence: 5
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _WaveHeight: 0.4
+    - _WaveHeight: 0.6
     - _WaveSpeed: 1
     m_Colors:
     - _BackgroundColor: {r: 0, g: 0.813, b: 1, a: 0}
