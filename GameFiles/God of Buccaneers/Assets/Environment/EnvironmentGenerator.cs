@@ -6,7 +6,7 @@ public class EnvironmentGenerator : MonoBehaviour
 {
     #region Struct
     [Serializable]
-    public struct EnvironmentOptions
+    public struct EnvironmentOptionsStruct
     {
         // NOTE : We can't set values insind of the struct because the Unity's C# is 9.0 not 10.0
 
@@ -16,7 +16,7 @@ public class EnvironmentGenerator : MonoBehaviour
         public bool HasWater;
 
         [Header("Mesh options :")]
-        [Range(0, 32)] public float MeshSize; // 30
+        [Range(0, 32)] public float ChunkSize; // 30
         [Range(0, 255)] public int VerticeSize; // 128
         [Range(0, 32)] public float HeightMultiplier; // 5
         [Range(1, 10)] public int NumberOfLayersPerUnitOfHeight; // 2
@@ -35,6 +35,8 @@ public class EnvironmentGenerator : MonoBehaviour
     #endregion
 
     #region Variables
+    public static EnvironmentGenerator Instance;
+
     // References
     [Header("References :")]
     [SerializeField] GameObject _terrainChunkPrefab;
@@ -44,12 +46,14 @@ public class EnvironmentGenerator : MonoBehaviour
     [Tooltip("BEWARE CAN BE LAGGY ! If this option is ON it will regenerate all the chunks every time the TerrainGenerator script values are modified.")]
     [SerializeField] bool _liveUpdate;
 
-    [Header("Map size :")]
-    [SerializeField] Vector2 _numberOfChunks;
+    [field:Header("Map size :")]
+    [field: SerializeField]
+    public Vector2 NumberOfChunks { get; private set; }
 
     // Struct
-    [Header("Environment options :")]
-    [SerializeField] EnvironmentOptions _environmentOptions;
+    [field:Header("Environment options :")]
+    [field:SerializeField]
+    public EnvironmentOptionsStruct EnvironmentOptions { get; private set; }
 
     // Terrain and Ocean chunk management
     readonly List<TerrainChunk> _terrainChunkComponents = new();
@@ -61,7 +65,12 @@ public class EnvironmentGenerator : MonoBehaviour
 
     #region Methods
 
-    private void Start()
+    void Awake()
+    {
+        Instance = Instantiator.ReturnInstance(this, Instantiator.InstanceConflictResolutions.WarningAndPause);
+    }
+
+    void Start()
     {
         // Security
         if (_terrainChunkPrefab == null)
@@ -92,17 +101,17 @@ public class EnvironmentGenerator : MonoBehaviour
 
     void GenerateTerrain()
     {
-        for (int x = 0; x < _numberOfChunks.x; x++)
+        for (int x = 0; x < NumberOfChunks.x; x++)
         {
-            for (int z = 0; z < _numberOfChunks.y; z++)
+            for (int z = 0; z < NumberOfChunks.y; z++)
             {
                 #region Terrain chunk
 
                 // Computing the terrain chunk position
                 Vector3 chunkPosition = new(
-                    x * _environmentOptions.MeshSize + _transform.position.x,
+                    x * EnvironmentOptions.ChunkSize + _transform.position.x,
                     0,
-                    z * _environmentOptions.MeshSize + _transform.position.z
+                    z * EnvironmentOptions.ChunkSize + _transform.position.z
                 );
 
                 // Creation of the terrain chunk GameObject
@@ -116,23 +125,23 @@ public class EnvironmentGenerator : MonoBehaviour
                 _terrainChunkComponents.Add(terrainChunkComponent);
 
                 // Generating the terrain chunk
-                terrainChunkComponent.GenerateTerrainChunk(_environmentOptions);
+                terrainChunkComponent.GenerateTerrainChunk(EnvironmentOptions);
                 #endregion
 
                 #region Ocean chunk
 
                 // Computing the ocean chunk position
                 Vector3 oceanChunkPosition = new(
-                    x * _environmentOptions.MeshSize + (_environmentOptions.MeshSize / 2) + _transform.position.x,
-                    _environmentOptions.WaterLevel,
-                    z * _environmentOptions.MeshSize + (_environmentOptions.MeshSize / 2) + _transform.position.z
+                    x * EnvironmentOptions.ChunkSize + (EnvironmentOptions.ChunkSize / 2) + _transform.position.x,
+                    EnvironmentOptions.WaterLevel,
+                    z * EnvironmentOptions.ChunkSize + (EnvironmentOptions.ChunkSize / 2) + _transform.position.z
                 );
 
                 // Creation of the ocean chunk GameObject
                 GameObject oceanChunkGameObject = Instantiate(_oceanChunkPrefab, oceanChunkPosition, Quaternion.identity, _transform);
                 
                 // Changing the scale of the ocean chunk accordingly (to the same size as the terrain chunk)
-                oceanChunkGameObject.transform.localScale = new(_environmentOptions.MeshSize / 10, 1, _environmentOptions.MeshSize / 10);
+                oceanChunkGameObject.transform.localScale = new(EnvironmentOptions.ChunkSize / 10, 1, EnvironmentOptions.ChunkSize / 10);
 
                 // Naming the ocean chunk GameObject
                 oceanChunkGameObject.name = $"OceanChunk ({x}x, {z}z)";

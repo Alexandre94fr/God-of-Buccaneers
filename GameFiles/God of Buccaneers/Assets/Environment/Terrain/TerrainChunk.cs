@@ -21,11 +21,11 @@ public class TerrainChunk : MonoBehaviour
 
     /// <summary> Will generate a chunk (a mesh) based on the given parameters. </summary>
     /// <param name = "p_environmentOptions"> A struct that containts all the terrain's options </param>
-    public void GenerateTerrainChunk(EnvironmentOptions p_environmentOptions)
+    public void GenerateTerrainChunk(EnvironmentOptionsStruct p_environmentOptions)
     {
         // To optimize
         int verticeSize = p_environmentOptions.VerticeSize;
-        float meshSize = p_environmentOptions.MeshSize;
+        float meshSize = p_environmentOptions.ChunkSize;
         float waterLevel = p_environmentOptions.WaterLevel - 0.01f;
 
         if (_meshFilter == null)
@@ -127,13 +127,13 @@ public class TerrainChunk : MonoBehaviour
     /// <param name = "p_z"> The Z position of the vertex in the verticeSize </param>
     /// <param name = "p_environmentOptions"> A struct that containts all the terrain's options </param>
     /// <returns> Returns the height (float value) of a vertex (a point in a mesh) </returns>
-    float GetHeight(float p_x, float p_z, EnvironmentOptions p_environmentOptions)
+    float GetHeight(float p_x, float p_z, EnvironmentOptionsStruct p_environmentOptions)
     {
         float perlinHeight = 0;
 
         float amplitude = 1;
         float frequency = p_environmentOptions.PerlinScale;
-        float spaceBetweenVertex = p_environmentOptions.MeshSize / (p_environmentOptions.VerticeSize - 1);
+        float spaceBetweenVertex = p_environmentOptions.ChunkSize / (p_environmentOptions.VerticeSize - 1);
 
         // To optimize
         Vector3 chunkWorldPosition = transform.position;
@@ -175,9 +175,9 @@ public class TerrainChunk : MonoBehaviour
         return perlinHeight;
     }
 
-    float GetNormalizedDistanceFromTerrainCenter(float p_x, float p_z, float p_spaceBetweenVertex, EnvironmentOptions p_environmentOptions)
+    float GetNormalizedDistanceFromTerrainCenter(float p_x, float p_z, float p_spaceBetweenVertex, EnvironmentOptionsStruct p_environmentOptions)
     {
-        Vector2 terrainCenter = new(p_environmentOptions.MeshSize / 2, p_environmentOptions.MeshSize / 2);
+        Vector2 terrainCenter = new(p_environmentOptions.ChunkSize / 2, p_environmentOptions.ChunkSize / 2);
 
         Vector2 vertexPos = new(p_x * p_spaceBetweenVertex, p_z * p_spaceBetweenVertex);
 
@@ -185,7 +185,7 @@ public class TerrainChunk : MonoBehaviour
         float distanceFromTerrainCenter = Vector2.Distance(terrainCenter, vertexPos);
 
         // Returning the normalization
-        return Mathf.Clamp01(distanceFromTerrainCenter / (p_environmentOptions.MeshSize / 2));
+        return Mathf.Clamp01(distanceFromTerrainCenter / (p_environmentOptions.ChunkSize / 2));
     }
     #endregion
 }

@@ -266,11 +266,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14a356c5cce7b9547a5d79ae5ef47211, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _cameraMovementInputSignificanceThreshold: 0.1
+  _cameraVelocityThreshold: 0.1
   _cameraMaxSpeed: 15
   _cameraAcceleration: 10
   _cameraDeceleration: 25
   _cameraZoomHeightSpeedMultiplicator: 10
   _isCameraZoomAngleFixed: 1
+  _cameraZoomInputSignificanceThreshold: 0.1
+  _zoomInputScalingFactor: 100
   _cameraZoomInStepPower: 10
   _cameraZoomOutStepPower: 10
   _cameraZoomMinimalHeight: 15
