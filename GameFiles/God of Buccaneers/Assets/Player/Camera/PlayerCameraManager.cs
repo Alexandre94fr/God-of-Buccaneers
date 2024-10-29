@@ -93,6 +93,9 @@ public class PlayerCameraManager : MonoBehaviour
         _chunkSize = new(_environmentGenerator.EnvironmentOptions.ChunkSize, _environmentGenerator.EnvironmentOptions.ChunkSize);
         _numberOfChunks = _environmentGenerator.NumberOfChunks;
 
+        // Compute the environment size
+        _environmentWorldSize = _chunkSize * _numberOfChunks;
+
         // Security
         if (_cameraTransform == null)
         {
@@ -105,9 +108,6 @@ public class PlayerCameraManager : MonoBehaviour
         _cameraTransform.LookAt(_transform);
 
         _cameraLastPosition = _transform.position;
-
-        // Compute the environment size
-        _environmentWorldSize = _chunkSize * _numberOfChunks;
     }
 
     void Update()
@@ -219,6 +219,7 @@ public class PlayerCameraManager : MonoBehaviour
     /// if yes than he will update the (_transform.position) to the last position (_cameraLastPosition) </summary>
     void HandleCameraBorder()
     {
+        // To optimize
         float positionX = _transform.position.x;
         float positionZ = _transform.position.z;
 

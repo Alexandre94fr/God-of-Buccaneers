@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using static EnvironmentGenerator;
 
 public class TerrainChunk : MonoBehaviour
@@ -21,10 +22,11 @@ public class TerrainChunk : MonoBehaviour
 
     /// <summary> Will generate a chunk (a mesh) based on the given parameters. </summary>
     /// <param name = "p_environmentOptions"> A struct that containts all the terrain's options </param>
-    public void GenerateTerrainChunk(EnvironmentOptionsStruct p_environmentOptions)
+    /// <param name = "p_islandCenterWorldPositions"> The list of position (in the vertices) of the center of the islands </param>
+    public void GenerateTerrainChunk(EnvironmentOptionsStruct p_environmentOptions, List<Vector2> p_islandCenterWorldPositions)
     {
         // To optimize
-        int verticeSize = p_environmentOptions.VerticeSize;
+        int verticeSize = p_environmentOptions.VerticeNumberPerLine;
         float meshSize = p_environmentOptions.ChunkSize;
         float waterLevel = p_environmentOptions.WaterLevel - 0.01f;
 
@@ -50,7 +52,7 @@ public class TerrainChunk : MonoBehaviour
                 // it will be converted in real vertex with Unity's function SetVertices())
                 Vector3 vertex = new(
                     x * spaceBetweenVertex,
-                    GetHeight(x, z, p_environmentOptions),
+                    GetHeight(x, z, p_environmentOptions, p_islandCenterWorldPositions),
                     z * spaceBetweenVertex
                 );
 
@@ -126,14 +128,15 @@ public class TerrainChunk : MonoBehaviour
     /// <param name = "p_x"> The X position of the vertex in the verticeSize </param>
     /// <param name = "p_z"> The Z position of the vertex in the verticeSize </param>
     /// <param name = "p_environmentOptions"> A struct that containts all the terrain's options </param>
+    /// <param name = "p_islandCenterWorldPositions"> The list of position (in the vertices) of the center of the islands </param>
     /// <returns> Returns the height (float value) of a vertex (a point in a mesh) </returns>
-    float GetHeight(float p_x, float p_z, EnvironmentOptionsStruct p_environmentOptions)
+    float GetHeight(float p_x, float p_z, EnvironmentOptionsStruct p_environmentOptions, List<Vector2> p_islandCenterWorldPositions)
     {
         float perlinHeight = 0;
 
         float amplitude = 1;
         float frequency = p_environmentOptions.PerlinScale;
-        float spaceBetweenVertex = p_environmentOptions.ChunkSize / (p_environmentOptions.VerticeSize - 1);
+        float spaceBetweenVertex = p_environmentOptions.ChunkSize / (p_environmentOptions.VerticeNumberPerLine - 1);
 
         // To optimize
         Vector3 chunkWorldPosition = transform.position;
@@ -162,30 +165,72 @@ public class TerrainChunk : MonoBehaviour
         if (!p_environmentOptions.IsIsland)
             perlinHeight *= p_environmentOptions.HeightMultiplier;
         else
-            perlinHeight *= p_environmentOptions.HeightMultiplier * (1 - GetNormalizedDistanceFromTerrainCenter(p_x, p_z, spaceBetweenVertex, p_environmentOptions));
-
-        // USED TO PLACE A BREAKPOINT
-        //if (perlinHeight > 1)
-        //    return p_environmentOptions.NumberOfLayersPerUnitOfHeight;
+            perlinHeight *= p_environmentOptions.HeightMultiplier * (1 - GetNormalizedDistanceFromIslandCenters(p_x, p_z, spaceBetweenVertex, p_environmentOptions, p_islandCenterWorldPositions));
 
         perlinHeight = Mathf.RoundToInt(perlinHeight);
-
-        //perlinHeight /= p_environmentOptions.NumberOfLayersPerUnitOfHeight;
-
+        
         return perlinHeight;
     }
 
-    float GetNormalizedDistanceFromTerrainCenter(float p_x, float p_z, float p_spaceBetweenVertex, EnvironmentOptionsStruct p_environmentOptions)
-    {
-        Vector2 terrainCenter = new(p_environmentOptions.ChunkSize / 2, p_environmentOptions.ChunkSize / 2);
 
-        Vector2 vertexPos = new(p_x * p_spaceBetweenVertex, p_z * p_spaceBetweenVertex);
+    /// <summary>
+    /// BEWARE ! The code of this function is not finished. It will be changed if other main features are finished.
+    /// </summary>
+    /// <param name = "p_x">  </param>
+    /// <param name = "p_z">  </param>
+    /// <param name = "p_spaceBetweenVertex">  </param>
+    /// <param name = "p_environmentOptions">  </param>
+    /// <param name = "p_islandCenterWorldPositions">  </param>
+    /// <returns>  </returns>
+    float GetNormalizedDistanceFromIslandCenters(float p_x, float p_z, float p_spaceBetweenVertex, EnvironmentOptionsStruct p_environmentOptions, List<Vector2> p_islandCenterWorldPositions)
+    {
+        Vector2 vertexWorldPosition = new(
+            p_x * p_spaceBetweenVertex + transform.position.x,
+            p_z * p_spaceBetweenVertex + transform.position.z
+        );
+
+        // TEMPORARY : TO TRY TO KNOW WHAT'S WRONG
+        //if (p_x == 50 && p_z == 50)
+        //    Debug.LogWarning($"Real position\n x : {vertexWorldPosition.x}, z : {vertexWorldPosition.y}");
+
+        float minimumDistanceInfluence = 1f;
 
         // Computing the distance
-        float distanceFromTerrainCenter = Vector2.Distance(terrainCenter, vertexPos);
+        foreach (Vector2 islandCenterWorldPositio in p_islandCenterWorldPositions)
+        {
+            Vector2 islandCenterWorldPosition = new(
+                islandCenterWorldPositio.x * p_spaceBetweenVertex,
+                islandCenterWorldPositio.y * p_spaceBetweenVertex
+            );
 
-        // Returning the normalization
-        return Mathf.Clamp01(distanceFromTerrainCenter / (p_environmentOptions.ChunkSize / 2));
+            // TEMPORARY : TO TRY TO KNOW WHAT'S WRONG
+            //if (p_x == 0 && p_z == 0)
+            //    Debug.LogWarning($"islandCenterWorldPosition\n x : {islandCenterWorldPosition.x}, z : {islandCenterWorldPosition.y}");
+
+            float distanceFromIslandCenter = Vector2.Distance(islandCenterWorldPosition, vertexWorldPosition) * 5;
+
+            // Normalisation en fonction de la taille totale de l'environnement
+            float totalIslandHeightInfluence = Mathf.Clamp01(distanceFromIslandCenter / (p_environmentOptions.ChunkSize * EnvironmentGenerator.Instance.NumberOfChunks.x * 0.5f));
+
+            minimumDistanceInfluence = Mathf.Min(minimumDistanceInfluence, totalIslandHeightInfluence);
+
+            // TEMPORARY : TO TRY TO KNOW WHAT'S WRONG
+            //if (p_x == 50 && p_z == 50)
+            //    Debug.LogWarning($"totalIslandHeightInfluence\n {totalIslandHeightInfluence}");
+        }
+
+        return minimumDistanceInfluence ;
+    }
+
+    float BACKUP_GetNormalizedDistanceFromEnvironmentCenter(float p_x, float p_z, float p_spaceBetweenVertex, EnvironmentOptionsStruct p_environmentOptions, Vector2 p_environmentCenterWorldPosition)
+    {
+        Vector2 vertexWorldPosition = new(p_x * p_spaceBetweenVertex + transform.position.x, p_z * p_spaceBetweenVertex + transform.position.z);
+
+        // Computing the distance
+        float distanceFromGlobalCenter = Vector2.Distance(p_environmentCenterWorldPosition, vertexWorldPosition);
+
+        // Normalisation en fonction de la taille de totale de l'environnement
+        return Mathf.Clamp01(distanceFromGlobalCenter / (p_environmentOptions.ChunkSize * EnvironmentGenerator.Instance.NumberOfChunks.x * 0.5f));
     }
     #endregion
 }
