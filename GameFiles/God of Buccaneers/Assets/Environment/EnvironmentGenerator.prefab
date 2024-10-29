@@ -48,15 +48,27 @@ MonoBehaviour:
     type: 3}
   _oceanChunkPrefab: {fileID: 2592469550288936859, guid: 90b36c14c5a7f104aae175cf677558de,
     type: 3}
+  _debugIslandCenterPrefab: {fileID: 434073657800177328, guid: ae9d18330a2dce94baae7bf673c253e4,
+    type: 3}
+  _oceanParent: {fileID: 0}
+  _terrainParent: {fileID: 0}
+  _isDebugOn: 0
+  _verticeToCheckIfInTerrainBorder: {x: 100, y: 100}
   _liveUpdate: 1
   <NumberOfChunks>k__BackingField: {x: 3, y: 3}
   <EnvironmentOptions>k__BackingField:
     Seed: 666
     IsIsland: 1
     HasWater: 1
+    EnvironmentEdgeFactor: 0.2
+    IslandNumber: 3
+    IslandSize: 15
+    MinimalDistanceBetweenIslandsFactor: 0.1
+    IslandGenerationHeightThreshold: 0.01
+    MinimalThreshold: 0
     ChunkSize: 30
-    VerticeSize: 255
-    HeightMultiplier: 10.3
+    VerticeNumberPerLine: 255
+    HeightMultiplier: 5
     NumberOfLayersPerUnitOfHeight: 7
     PerlinScale: 0.11
     OctaveCount: 5
