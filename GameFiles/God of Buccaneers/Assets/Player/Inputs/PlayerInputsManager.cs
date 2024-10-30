@@ -11,6 +11,7 @@ public class PlayerInputsManager : MonoBehaviour
 
     // References
     PlayerCameraManager _playerCameraManager;
+    PlayerInteractionManager _playerInteractionManager;
     #endregion
 
     #region -= Methods =-
@@ -18,6 +19,7 @@ public class PlayerInputsManager : MonoBehaviour
     private void Start()
     {
         _playerCameraManager = PlayerCameraManager.Instance;
+        _playerInteractionManager = PlayerInteractionManager.Instance;
     }
 
     private void Update()
@@ -57,6 +59,15 @@ public class PlayerInputsManager : MonoBehaviour
         if (p_callbackContext.performed)
         {
             print("RecieveInteractLaunchDivineCapacityUnselectInputs");
+
+            // If no DivineCapacity is selected :
+            
+            // Launch a raycast at the player cursor (will manage and return true if he touch an Interactable object)
+            if (!_playerInteractionManager.LaunchInteractionRaycast(Input.mousePosition))
+            {
+                print("Interactable object not touched");
+                // Launch selected divine capacity
+            }
         }
     }
     public void RecieveAddTerrainInputs(InputAction.CallbackContext p_callbackContext)
