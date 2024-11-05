@@ -7,11 +7,12 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
 
     protected virtual void Start()
     {
-        LayerSecurity();
+        LayerSecurity(gameObject);
     }
 
     /// <summary>
     /// Method you should call when you want the object to be consider interacted.
+    /// 
     /// <para> Will call the OnInteraction method if you don't override this method. </para> </summary>
     public virtual void Interact()
     {
@@ -22,7 +23,9 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
 
     /// <summary>
     /// The behaviour of your object when interacted.
+    /// 
     /// <para> This method will be automatically called when the not override Interact method is called. </para>
+    /// 
     /// <para> This method can be override. </para> </summary>
     protected virtual void OnInteraction()
     {
@@ -30,12 +33,13 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
     }
 
     /// <summary>
-    /// Check if the GameObject has one of the selected layers, if not, a warning will be sent. 
+    /// Check if the given GameObject has one of the selected layers, if not, a warning will be sent. 
+    /// 
     /// <para> This method is automaticaly called insind the Unity Start method, 
     /// if and only if you don't called the Unity Start method insind the child of InteractableBase, 
     /// if you want to have your own Start implementation you can override the Start, 
     /// but you will have to called the LayerSecurity method yourself. </para> </summary>
-    protected void LayerSecurity()
+    protected void LayerSecurity(GameObject p_gameObjectToCheck)
     {
         bool hasOneOfSelectedLayers = false;
         string selectedLayers = "";
@@ -49,7 +53,7 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
             {
                 selectedLayers += $"layer n°{i} ({LayerMask.LayerToName(i)}), ";
 
-                if (gameObject.layer == i)
+                if (p_gameObjectToCheck.layer == i)
                 {
                     hasOneOfSelectedLayers = true;
                 }
@@ -60,12 +64,12 @@ public abstract class InteractableBase : MonoBehaviour, IInteractable
         {
             if (selectedLayers == "")
                 Debug.LogWarning(
-                    $"You want the GameObject '{gameObject.name}' to have no layers (layer 'Nothing')" +
+                    $"You want the GameObject '{p_gameObjectToCheck.name}' to have no layers (layer 'Nothing')" +
                     $" but you can't set the layer Nothing to a GameObject in the inspector."
                 );
             else
                 Debug.LogWarning(
-                    $"The GameObject '{gameObject.name}' doesn't have the selected layers.\n" +
+                    $"The GameObject '{p_gameObjectToCheck.name}' doesn't have the selected layers.\n" +
                     $"    Selected layers : {selectedLayers.TrimEnd(',', ' ')}."
                 );
         }

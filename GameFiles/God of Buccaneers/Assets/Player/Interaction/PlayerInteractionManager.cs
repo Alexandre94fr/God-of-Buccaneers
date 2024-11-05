@@ -59,14 +59,16 @@ public class PlayerInteractionManager : MonoBehaviour
 
         InteractableBase interactableBase = null;
 
+        // BEWARE : To match the infrastructure used, we do : 'raycastHit.transform.parent.gameObject' NOT 'raycastHit.transform.gameObject'
+        //          it's because our Sprite (he has the collider) is the children of the interactable object.
         if (isLastRaycast3D)
         {
-            if (!raycastHit.transform.gameObject.TryGetComponent(out interactableBase))
+            if (!raycastHit.transform.parent.gameObject.TryGetComponent(out interactableBase))
                 return false;
         }
         else
         {
-            if (!raycastHit2D.transform.gameObject.TryGetComponent(out interactableBase))
+            if (!raycastHit2D.transform.parent.gameObject.TryGetComponent(out interactableBase))
                 return false;
         }
         #endregion
