@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SwordStatistics:
     Name: Iron sword
-    InventorySprite: {fileID: 0}
+    InventorySprite: {fileID: 21300000, guid: cca0a103117b873419d9a2dde52af49d, type: 3}
     EquippedSprite: {fileID: 0}
     AttackDamage: 25
     AttackSpeed: 1.15

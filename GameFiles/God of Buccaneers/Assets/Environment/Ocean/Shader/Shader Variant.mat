@@ -25,7 +25,8 @@ Material:
     serializedVersion: 3
     m_TexEnvs: []
     m_Ints: []
-    m_Floats: []
+    m_Floats:
+    - _WaveHeight: 0.6
     m_Colors:
     - _BackgroundColor: {r: 0, g: 1, b: 0.010478497, a: 0}
     - _BaseBallColor: {r: 0.029412787, g: 0.5320754, b: 0.023090005, a: 0}

@@ -13,9 +13,8 @@ public class Pirate : InteractableBase
     // Start is called before the first frame update
     protected override void Start()
     {
-        // Check if the Sprite GameObject of the Pirate has the good layer,
-        // we can't use GetComponentInChildren because the Pirate in 3D does not have the same component as the 2D one.
-        LayerSecurity(transform.Find("Sprite").gameObject);
+        // Check if the Sprite of our GameObject has the good layer,
+        LayerSecurity(GetComponentInChildren<BoxCollider>().gameObject);
     }
 
     // Update is called once per frame
@@ -30,7 +29,7 @@ public class Pirate : InteractableBase
 
         // Testing to set new resources into the pirate 
 
-        Inventory.ColdCoinNumber++;
+        Inventory.GoldCoinNumber++;
         
         SwordStatistics swordStatistics = new()
         {
