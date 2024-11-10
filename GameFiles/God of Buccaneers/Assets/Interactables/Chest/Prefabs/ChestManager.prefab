@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6451078451941977625
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 940344214401390573}
+  - component: {fileID: 6825662406794133347}
+  m_Layer: 0
+  m_Name: ChestManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &940344214401390573
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6451078451941977625}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6825662406794133347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6451078451941977625}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ba33e284e89fda43abeab0d90008e09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _chestPrefab: {fileID: 2966256534800476283, guid: 93a77852686e4ab47bd40427ff731db5,
+    type: 3}
+  _totalDropRate: 100
+  _defaultChestLoots:
+  - ChestLoot:
+      SwordScriptableObject: {fileID: 0}
+      ArmorScriptableObject: {fileID: 0}
+      GoldCoin: 5
+    DropRate: 49
+  - ChestLoot:
+      SwordScriptableObject: {fileID: 11400000, guid: 8eaf810ca4c59464590743a1901d66ca,
+        type: 2}
+      ArmorScriptableObject: {fileID: 0}
+      GoldCoin: 3
+    DropRate: 15
+  - ChestLoot:
+      SwordScriptableObject: {fileID: 11400000, guid: 914fd39624e29c74c89273291926e07d,
+        type: 2}
+      ArmorScriptableObject: {fileID: 0}
+      GoldCoin: 1
+    DropRate: 10
+  - ChestLoot:
+      SwordScriptableObject: {fileID: 11400000, guid: abebac90cc3ebd1408f78d8021735bd9,
+        type: 2}
+      ArmorScriptableObject: {fileID: 0}
+      GoldCoin: 0
+    DropRate: 1
+  - ChestLoot:
+      SwordScriptableObject: {fileID: 0}
+      ArmorScriptableObject: {fileID: 11400000, guid: ca847841e4a2019498018034584d4dca,
+        type: 2}
+      GoldCoin: 3
+    DropRate: 15
+  - ChestLoot:
+      SwordScriptableObject: {fileID: 0}
+      ArmorScriptableObject: {fileID: 11400000, guid: a1642f90fb2b024479d59624a4b82eb8,
+        type: 2}
+      GoldCoin: 1
+    DropRate: 10

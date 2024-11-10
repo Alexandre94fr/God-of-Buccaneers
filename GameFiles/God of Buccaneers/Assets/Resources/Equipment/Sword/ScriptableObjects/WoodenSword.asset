@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SwordStatistics:
     Name: Wooden sword
-    InventorySprite: {fileID: 0}
+    InventorySprite: {fileID: 21300000, guid: bd8c62c486e270640b0633dd45fdb687, type: 3}
     EquippedSprite: {fileID: 0}
     AttackDamage: 15
     AttackSpeed: 0.5

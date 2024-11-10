@@ -4,6 +4,7 @@ using System;
 using System.Reflection;
 using UnityEngine;
 
+[DefaultExecutionOrder(-50)]
 public class Instantiator : MonoBehaviour
 {
     #region Variables

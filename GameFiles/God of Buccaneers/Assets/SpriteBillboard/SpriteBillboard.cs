@@ -1,23 +1,21 @@
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(BoxCollider))]
 public class SpriteBillboard : MonoBehaviour
 {
-    [Header("References :")]
-    [SerializeField] Transform _spriteTransform;
-
     [Header("Constrains :")]
     [SerializeField] bool _isXAxisLocked;
     [SerializeField] bool _isYAxisLocked;
     [SerializeField] bool _isZAxisLocked;
 
+    Transform _spriteTransform;
     Transform _cameraTransform;
 
     // Start is called before the first frame update
     void Start()
     {
-        if (_spriteTransform == null)
-            Debug.LogError("ERROR ! The _spriteTransform Transform variable is not set.");
-
+        _spriteTransform = transform;
         _cameraTransform = Camera.main.transform;
     }
 

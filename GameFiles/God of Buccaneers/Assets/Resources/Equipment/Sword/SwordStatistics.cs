@@ -3,7 +3,7 @@ using UnityEngine;
 
 // For debugging purpose this class is visible in the inspector
 [Serializable]
-public class SwordStatistics
+public struct SwordStatistics
 {
     // Basic statistics
     [Header("Basic statistics :")]
@@ -28,4 +28,15 @@ public class SwordStatistics
         "that mean the AttackDamage value will be multiply by 1.5f when calculating the real damage dealt " +
         "\n\nClamped between 0 and 2.")]
     [Range(0, 2)] public float ArmorPenetrationFactor; // ArmorPenetrationRate ?
+
+    public override string ToString()
+    {
+        return $"SwordStatistics :\n" +
+            $"--- Name : {(Name != "" ? Name : "No name")}\n" +
+            $"--- InventorySprite : {(InventorySprite != null ? Name : "null")}\n" +
+            $"--- EquippedSprite : {(EquippedSprite != null ? Name : "null")}\n" +
+            $"--- AttackDamage : {AttackDamage}\n" +
+            $"--- AttackSpeed : {AttackSpeed}\n" +
+            $"--- ArmorPenetrationFactor : {ArmorPenetrationFactor}";
+    }
 }

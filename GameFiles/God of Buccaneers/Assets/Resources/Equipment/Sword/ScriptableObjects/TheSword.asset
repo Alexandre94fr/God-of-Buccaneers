@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SwordStatistics:
     Name: The sword
-    InventorySprite: {fileID: 0}
+    InventorySprite: {fileID: 21300000, guid: 2f0a438228a91dd4a87df5dad03f5e5f, type: 3}
     EquippedSprite: {fileID: 0}
     AttackDamage: 35
     AttackSpeed: 1.15

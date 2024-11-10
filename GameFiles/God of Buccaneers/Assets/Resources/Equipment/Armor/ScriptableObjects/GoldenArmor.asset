@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ArmorStatistics:
     Name: Golden armor
-    InventorySprite: {fileID: 0}
+    InventorySprite: {fileID: 21300000, guid: 323c25d0e814350418abb9cbd1d41b47, type: 3}
     EquippedSprite: {fileID: 0}
-    ProtectionFactor: 1.75
     Defense: 10
+    ProtectionFactor: 1.75

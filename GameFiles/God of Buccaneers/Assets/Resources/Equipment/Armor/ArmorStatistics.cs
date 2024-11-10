@@ -3,7 +3,7 @@ using UnityEngine;
 
 // For debugging purpose this class is visible in the inspector
 [Serializable]
-public class ArmorStatistics
+public struct ArmorStatistics
 {
     // Basic statistics
     [Header("Basic statistics :")]
@@ -24,4 +24,14 @@ public class ArmorStatistics
         "that means the Defense value will be multiply by 1.5f when calculating the real damage recieved." +
         "\n\nClamped between 1 and 10.")]
     [Range(1, 10)] public float ProtectionFactor;
+
+    public override string ToString()
+    {
+        return $"ArmorStatistics :\n" +
+            $"--- Name : {(Name != "" ? Name : "No name")}\n" +
+            $"--- InventorySprite : {(InventorySprite != null ? Name : "null")}\n" +
+            $"--- EquippedSprite : {(EquippedSprite != null ? Name : "null")}\n" +
+            $"--- Defense : {Defense}\n" +
+            $"--- ProtectionFactor : {ProtectionFactor}";
+    }
 }

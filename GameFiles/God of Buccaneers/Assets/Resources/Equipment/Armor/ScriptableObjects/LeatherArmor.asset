@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ArmorStatistics:
     Name: Leather armor
-    InventorySprite: {fileID: 0}
+    InventorySprite: {fileID: 21300000, guid: 6c0d8e4ea95f8c14285f595d7caea697, type: 3}
     EquippedSprite: {fileID: 0}
-    ProtectionFactor: 1.25
     Defense: 5
+    ProtectionFactor: 1.25

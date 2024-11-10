@@ -3,10 +3,38 @@ using System;
 [Serializable]
 public class Sword
 {
-    public SwordStatistics Statistics;
+    public SwordStatistics Statistics = new();
+
+    #region Constructors
+
+    public Sword(SwordScriptableObject p_swordScriptableObject)
+    {
+        SetSwordStatistics(p_swordScriptableObject);
+    }
+
+    public Sword(SwordStatistics p_swordStatistics)
+    {
+        SetSwordStatistics(p_swordStatistics);
+    }
+    #endregion
+
+    #region Methods
+
+    public override string ToString()
+    {
+        return $"Statistics : {Statistics}";
+    }
+
+    #region Set sword statistics
 
     public void SetSwordStatistics(SwordScriptableObject p_swordScriptableObject)
     {
+        if (p_swordScriptableObject == null)
+        {
+            ResetSwordValues();
+            return;
+        }
+
         // Basic statistics
         Statistics.Name = p_swordScriptableObject.SwordStatistics.Name;
 
@@ -22,16 +50,23 @@ public class Sword
 
     public void SetSwordStatistics(SwordStatistics p_swordStatistics)
     {
+        Statistics = p_swordStatistics;
+    }
+    #endregion
+
+    public void ResetSwordValues()
+    {
         // Basic statistics
-        Statistics.Name = p_swordStatistics.Name;
+        Statistics.Name = "";
 
         // Visual statistics
-        Statistics.InventorySprite = p_swordStatistics.InventorySprite;
-        Statistics.EquippedSprite = p_swordStatistics.EquippedSprite;
+        Statistics.InventorySprite = null;
+        Statistics.EquippedSprite = null;
 
         // Combat statistics
-        Statistics.AttackDamage = p_swordStatistics.AttackDamage;
-        Statistics.AttackSpeed = p_swordStatistics.AttackSpeed;
-        Statistics.ArmorPenetrationFactor = p_swordStatistics.ArmorPenetrationFactor;
+        Statistics.AttackDamage = 0;
+        Statistics.AttackSpeed = 0;
+        Statistics.ArmorPenetrationFactor = 1;
     }
+    #endregion
 }
