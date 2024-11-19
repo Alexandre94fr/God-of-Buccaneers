@@ -25,7 +25,7 @@ public class Pirate : InteractableBase
 
     public override void Interact()
     {
-        Debug.Log("Je suis spécial");
+        Debug.Log("<color=yellow> Hey I'm Jack Sparrow, I'm lost...and drunk...\n Are you the C++ god ?</color>");
 
         // Testing to set new resources into the pirate 
 
