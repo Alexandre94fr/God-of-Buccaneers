@@ -478,8 +478,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1199918257}
   - {fileID: 756917702}
+  - {fileID: 1199918257}
   - {fileID: 950115830}
   - {fileID: 711917879}
   m_Father: {fileID: 0}
@@ -707,7 +707,7 @@ Transform:
   m_GameObject: {fileID: 1301573801}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 40, y: 5, z: 40}
+  m_LocalPosition: {x: -12.58, y: 5, z: 40}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -928,8 +928,8 @@ Transform:
   m_GameObject: {fileID: 1515416118}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 30, y: 5, z: 30}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -22.58, y: 5, z: 30}
+  m_LocalScale: {x: 0.1, y: 1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1467762795}
@@ -1432,7 +1432,7 @@ PrefabInstance:
     - target: {fileID: 8716336917217801428, guid: 93a77852686e4ab47bd40427ff731db5,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 37.87
+      value: -14.710001
       objectReference: {fileID: 0}
     - target: {fileID: 8716336917217801428, guid: 93a77852686e4ab47bd40427ff731db5,
         type: 3}
@@ -1693,11 +1693,6 @@ PrefabInstance:
       propertyPath: _terrainParent
       value: 
       objectReference: {fileID: 71122859}
-    - target: {fileID: 7506202214634080801, guid: ccbf472be83a59d45af420d8bf68b2da,
-        type: 3}
-      propertyPath: <EnvironmentOptions>k__BackingField.IslandNumber
-      value: 7
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

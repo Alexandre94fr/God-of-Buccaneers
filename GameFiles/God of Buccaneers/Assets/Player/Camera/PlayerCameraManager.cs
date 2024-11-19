@@ -91,7 +91,7 @@ public class PlayerCameraManager : MonoBehaviour
 
         // Getting values
         _chunkSize = new(_environmentGenerator.EnvironmentOptions.ChunkSize, _environmentGenerator.EnvironmentOptions.ChunkSize);
-        _numberOfChunks = _environmentGenerator.NumberOfChunks;
+        _numberOfChunks = _environmentGenerator.EnvironmentOptions.NumberOfChunks;
 
         // Compute the environment size
         _environmentWorldSize = _chunkSize * _numberOfChunks;

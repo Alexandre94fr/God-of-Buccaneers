@@ -52,28 +52,25 @@ MonoBehaviour:
     type: 3}
   _oceanParent: {fileID: 0}
   _terrainParent: {fileID: 0}
-  _isDebugOn: 0
-  _verticeToCheckIfInTerrainBorder: {x: 100, y: 100}
+  _isDebugOn: 1
   _liveUpdate: 1
-  <NumberOfChunks>k__BackingField: {x: 3, y: 3}
   <EnvironmentOptions>k__BackingField:
     Seed: 666
+    NumberOfChunks: {x: 10, y: 10}
     IsIsland: 1
     HasWater: 1
-    EnvironmentEdgeFactor: 0.2
+    EnvironmentEdgeFactor: 0.1
     IslandNumber: 3
-    IslandSize: 15
-    MinimalDistanceBetweenIslandsFactor: 0.1
-    IslandGenerationHeightThreshold: 0.01
-    MinimalThreshold: 0
+    IslandSizeFactor: 0.15
+    MinimalDistanceBetweenIslandsFactor: 0.15
     ChunkSize: 30
-    VerticeNumberPerLine: 255
-    HeightMultiplier: 5
-    NumberOfLayersPerUnitOfHeight: 7
-    PerlinScale: 0.11
+    TerrainChunkVerticeNumberPerLine: 255
+    OceanChunkVerticeNumberPerLine: 128
+    Frequency: 0.05
     OctaveCount: 5
     Lacunarity: 1
     Persistance: 0.1
+    HeightMultiplier: 5
     HeightDistribution:
       serializedVersion: 2
       m_Curve:
@@ -98,4 +95,6 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    WaterLevel: 0
+    WaterLevel: 0.1
+  _environmentStatisticsScriptableObject: {fileID: 11400000, guid: f99b4ad230a4de54c9cfbbb207836fd1,
+    type: 2}
