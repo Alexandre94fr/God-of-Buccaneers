@@ -1,0 +1,47 @@
+07/10/2024
+
+Contraintes du genre : 
+----------------------
+
+- Pouvoir divin : Le joueur incarne une force supérieure capable de modeler l'environnement, d'affecter les populations et d'imposer des lois naturelles ou surnaturelles.
+
+- Gestion indirecte : Contrairement aux jeux de stratégie en temps réel, où le joueur contrôle directement les unités, dans les God Games, les joueurs influencent les actions des unités de manière indirecte, via des modifications du monde ou des événements.
+
+- Évolution dynamique : Les mondes dans ces jeux évoluent souvent de manière autonome, où les civilisations, les écosystèmes, et les événements suivent une logique interne et peuvent réagir aux actions divines du joueur.
+
+- Interaction environnementale : Les God Games mettent souvent l'accent sur l'altération du terrain, le contrôle des éléments (feu, eau, vent, etc.), et la création de ressources ou de contraintes pour les habitants du monde.
+
+Concept :
+---------
+
+- Des pirates (temporalité XVIII siècle), de différente factions arrivent sur une archipel d'île inconnu ou des trésors sont enterrés, ils doivent installer des camp afin de fouiller les îles et de trouver ces dit trésors.
+Le joueur est un dieu spectateur de ça, il pourra interagir avec le monde, et les pirates via différentes actions tel que placer des trésors, créer des catastrophe, invoqué de nouveau pirate, et modifier le terrain. Le joueur sera complètement libre de ses actions, la partie ne s'arrêtera jamais, même si tous les pirates sont mort.
+
+Features :
+----------
+
+- Avoir une caméra top down, qui peut être déplacé en avant, en arrière, à gauche, et à droite, de plus on ne peut la déplacer que dans une certaine zone. On peut aussi zoomer / dézoomer jusqu'à un certains point.
+
+- Avoir un archipel d'îles qui peut être généré procéduralement, chaque île peut avoir une taille différente, une hauteur différente, un relief différent (plus/moins de zone plate).
+
+- Avoir un Océan qui sépare les îles, de plus la couleur de l'Océan, la hauteur, et la vitesse des vagues, peuvent être modifiées.
+
+- Création d'un curseur en jeu, quand le joueur fait un clic gauche cela sélectionne l'objet interactible à la position du curseur (si il y en a un), cela affiche un UI de l'objet sélectionné  
+
+- Avoir un système de modification/altération du terrain (pouvoir enlever/ajouter du terrain via un brush, aplanir le terrain, déplacer/ajouter/détruire des objets sur le terrain)
+
+{[ATTENTION : TRAVAIL TRES GRAND, POSSIBILITÉ D'UTILISER DES ASSETS EXTERRIEURS]}
+- Avoir une certaine quantité d'objets 3D disponible (palmier, coffre au trésor, caillou, rocher, maison, port, bateau, pirates [homme femme] avec un squeletal mesh) 
+NOTE : Chaque bâtiment et bateau d'une faction aura sa couleur sur le dessus du modèle 3D
+
+- Création d'un pirate (Name, HP, Attack, AttackSpeed, MovementSpeed, FactionAllegiance, IsFactionLeader, Equipment [Épée, armure])
+
+- Création de faction 
+-- RESSOURCES : Pièces d'or, Équipement
+-- AUTRES STATS : Nom, Logo, Couleur, Nombre de membre, nombre de camps, nombre de port, nombre de bateau
+
+- Création de UI d'affichage de statistique (pirate, faction, équipement)
+
+- Création d'une IA pour les pirates (pouvoir former de nouvelle faction, avoir des organes visuelles, et sonore pour pouvoir detecter/découvrir et se déplacer sur la map, construire des camps [maison, port, bateau]), entrer dans des bateaux, explorer, et coloniser le monde, faire du commerce avec d'autres faction ou hors map [acheter/vendre pièce d'équipement contre pièce d'or], entrée en guerre contre une autre faction, créer des alliances avec d'autres factions, attaquer un autre pirate [corps à corps avec son épée, ou ses poids], chercher un trésor, trouver un trésor, ouvrir un trésor, équiper/dé-équiper un équipement)
+
+- Logic d'un camp : Si la camp n'a plus de bâtiment alors il est détruit 
