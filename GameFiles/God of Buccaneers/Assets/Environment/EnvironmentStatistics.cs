@@ -20,26 +20,26 @@ public class EnvironmentStatistics : ScriptableObject
         [Range(0.05f, 1)] public float EnvironmentEdgeFactor; // 0.1
 
         [Header("Island options :")]
-        [Range(1, 10)] public int IslandNumber; // 5
+        [Range(1, 10)] public int IslandNumber; // 4
         [Range(0.05f, 1)] public float IslandSizeFactor; // 0.15f
         [Range(0.05f, 1)] public float MinimalDistanceBetweenIslandsFactor; // 0.15f
 
         [Header("Mesh options :")]
         [Range(1, 32)] public int ChunkSize; // 30
-        [Range(3, 255)] public int TerrainChunkVerticeNumberPerLine; // 255
-        [Range(16, 255)] public int OceanChunkVerticeNumberPerLine; // 255
+        [Range(3, 255)] public int TerrainChunkVerticeNumberPerLine; // 128
+        [Range(16, 255)] public int OceanChunkVerticeNumberPerLine; // 128
 
         [Header("Perlin noise options :")]
-        [Range(0, 1)] public float Frequency; // 0.09f
+        [Range(0, 1)] public float Frequency; // 0.05f
         [Range(1, 10)] public int OctaveCount; // 5
         [Range(0.05f, 1)] public float Lacunarity; // 1f
         [Range(0, 1)] public float Persistance; // 0.1f
         [Range(1, 32)] public float HeightMultiplier; // 5
-        public AnimationCurve HeightDistribution;
+        public AnimationCurve HeightDistribution; // 1
 
         [Header("Water options :")]
 
-        [Range(0, 2)] public float WaterLevel; // 0.2f
+        [Range(0, 2)] public float WaterLevel; // 1f
     }
     #endregion
 

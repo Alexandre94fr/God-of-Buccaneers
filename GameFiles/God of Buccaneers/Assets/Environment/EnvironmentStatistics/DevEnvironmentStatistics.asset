@@ -18,7 +18,7 @@ MonoBehaviour:
     IsIsland: 1
     HasWater: 1
     EnvironmentEdgeFactor: 0.1
-    IslandNumber: 3
+    IslandNumber: 4
     IslandSizeFactor: 0.15
     MinimalDistanceBetweenIslandsFactor: 0.15
     ChunkSize: 30
@@ -53,4 +53,4 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    WaterLevel: 0.1
+    WaterLevel: 1

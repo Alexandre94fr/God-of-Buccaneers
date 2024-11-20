@@ -60,11 +60,11 @@ MonoBehaviour:
     IsIsland: 1
     HasWater: 1
     EnvironmentEdgeFactor: 0.1
-    IslandNumber: 3
+    IslandNumber: 4
     IslandSizeFactor: 0.15
     MinimalDistanceBetweenIslandsFactor: 0.15
     ChunkSize: 30
-    TerrainChunkVerticeNumberPerLine: 255
+    TerrainChunkVerticeNumberPerLine: 128
     OceanChunkVerticeNumberPerLine: 128
     Frequency: 0.05
     OctaveCount: 5
@@ -95,6 +95,6 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    WaterLevel: 0.1
+    WaterLevel: 1
   _environmentStatisticsScriptableObject: {fileID: 11400000, guid: f99b4ad230a4de54c9cfbbb207836fd1,
     type: 2}

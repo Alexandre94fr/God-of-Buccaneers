@@ -19,10 +19,14 @@ public class EnvironmentGenerator : MonoBehaviour
 
     // Debuging
     [Header("Debuging :")]
+    [Tooltip("If ON, will show a lot of debugging informations (island center cordonates, time in real second spent in each environment generation part, and more...)")]
     [SerializeField] bool _isDebugOn;
 
     [Tooltip("BEWARE CAN BE LAGGY ! If this option is ON it will regenerate all the chunks every time the TerrainGenerator script's values are modified.")]
     [SerializeField] bool _liveUpdate;
+
+    /// <summary> The current environment options set by _environmentStatisticsScriptableObject at the launch of the game.
+    /// <para> You can change EnvironmentOptions during playtime and it will affect how the environment will be re-generated. </para> </summary>
     [field: SerializeField] public EnvironmentOptionsStruct EnvironmentOptions { get; private set; }
 
     // Environment parameters
