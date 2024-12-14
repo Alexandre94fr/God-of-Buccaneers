@@ -16,6 +16,7 @@ public class EnvironmentStatistics : ScriptableObject
         public Vector2Int NumberOfChunks; // 10x10
         public bool IsIsland; // true
         public bool HasWater; // true
+        public bool IsTerrainSmoothed; // true
 
         [Range(0.05f, 1)] public float EnvironmentEdgeFactor; // 0.1
 
