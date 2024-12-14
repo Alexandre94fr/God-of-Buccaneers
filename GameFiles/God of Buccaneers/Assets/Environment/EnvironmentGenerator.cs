@@ -37,9 +37,6 @@ public class EnvironmentGenerator : MonoBehaviour
     readonly List<TerrainChunk> _terrainChunkComponents = new();
     readonly List<OceanChunk> _oceanChunkComponents = new();
 
-    Vector2Int _environmentWorldSize;
-    float[,] _terrainNoiseMap;
-
     Vector2Int _allTerrainVertices;
     float _worldSpaceBetweenVertex;
 
@@ -73,9 +70,6 @@ public class EnvironmentGenerator : MonoBehaviour
 
         // Setting local references
         _transform = transform;
-
-        // Compute the environment size
-        _environmentWorldSize = EnvironmentOptions.ChunkSize * EnvironmentOptions.NumberOfChunks;
 
         // Compute all the vertices in all the terrains
         _allTerrainVertices = EnvironmentOptions.TerrainChunkVerticeNumberPerLine * EnvironmentOptions.NumberOfChunks;
@@ -341,7 +335,7 @@ public class EnvironmentGenerator : MonoBehaviour
                 terrainChunkGameObject.name = $"TerrainChunk ({x}x, {z}z)";
 
                 if (!terrainChunkGameObject.TryGetComponent(out TerrainChunk terrainChunkComponent))
-                    Debug.LogError($"<color=red>ERROR !</color> The Terrain chunk GameObject '{terrainChunkGameObject.name}' don't have an OceanChunk Script");
+                    Debug.LogError($"<color=red>ERROR !</color> The Terrain chunk GameObject '{terrainChunkGameObject.name}' don't have an TerrainChunk Script");
 
                 _terrainChunkComponents.Add(terrainChunkComponent);
 
@@ -360,30 +354,33 @@ public class EnvironmentGenerator : MonoBehaviour
                     TimeCounter.StartTimer(3);
                 }
 
-                #region Ocean chunk
+                if (EnvironmentOptions.HasWater)
+                {
+                    #region Ocean chunk
 
-                // Computing the ocean chunk position
-                Vector3 oceanChunkPosition = new(
-                    x * EnvironmentOptions.ChunkSize + _transform.position.x,
-                    EnvironmentOptions.WaterLevel,
-                    z * EnvironmentOptions.ChunkSize + _transform.position.z
-                );
+                    // Computing the ocean chunk position
+                    Vector3 oceanChunkPosition = new(
+                        x * EnvironmentOptions.ChunkSize + _transform.position.x,
+                        EnvironmentOptions.WaterLevel,
+                        z * EnvironmentOptions.ChunkSize + _transform.position.z
+                    );
 
-                // Creation of the ocean chunk GameObject
-                GameObject oceanChunkGameObject = Instantiate(_oceanChunkPrefab, oceanChunkPosition, Quaternion.identity, _oceanParent.transform);
+                    // Creation of the ocean chunk GameObject
+                    GameObject oceanChunkGameObject = Instantiate(_oceanChunkPrefab, oceanChunkPosition, Quaternion.identity, _oceanParent.transform);
 
-                // Naming the ocean chunk GameObject
-                oceanChunkGameObject.name = $"OceanChunk ({x}x, {z}z)";
+                    // Naming the ocean chunk GameObject
+                    oceanChunkGameObject.name = $"OceanChunk ({x}x, {z}z)";
 
-                if (!oceanChunkGameObject.TryGetComponent(out OceanChunk oceanChunkComponent))
-                    Debug.LogError($"ERROR ! The Ocean chunk GameObject '{oceanChunkGameObject.name}' don't have an OceanChunk Script");
+                    if (!oceanChunkGameObject.TryGetComponent(out OceanChunk oceanChunkComponent))
+                        Debug.LogError($"ERROR ! The Ocean chunk GameObject '{oceanChunkGameObject.name}' don't have an OceanChunk Script");
 
-                _oceanChunkComponents.Add(oceanChunkComponent);
+                    _oceanChunkComponents.Add(oceanChunkComponent);
 
-                oceanChunkComponent.GenerateOceanChunkMesh(EnvironmentOptions);
+                    oceanChunkComponent.GenerateOceanChunkMesh(EnvironmentOptions);
 
 
-                #endregion
+                    #endregion
+                }
 
                 if (_isDebugOn) 
                     oceanTimeElapsed += TimeCounter.StopTimer(3, false);
@@ -400,10 +397,6 @@ public class EnvironmentGenerator : MonoBehaviour
 
     void DestroyAllEnvironment()
     {
-        // Security
-        if (_terrainChunkComponents.Count == 0)
-            return;
-
         // Destruction of all GameObjects links to the environment
         foreach (TerrainChunk terrainChunkComponent in _terrainChunkComponents)
         {
@@ -420,7 +413,7 @@ public class EnvironmentGenerator : MonoBehaviour
             Destroy(debugIslandCenter);
         }
 
-        // Reset the lists
+        // Resetting of the lists
         _terrainChunkComponents.Clear();
         _oceanChunkComponents.Clear();
         _debugIslandCenterPrefabs.Clear();

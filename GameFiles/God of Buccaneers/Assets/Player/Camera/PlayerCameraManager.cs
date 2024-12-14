@@ -31,8 +31,8 @@ public class PlayerCameraManager : MonoBehaviour
 
     [Range(0f, 25f)] [SerializeField] float _cameraZoomInStepPower = 2f;
     [Range(0f, 25f)] [SerializeField] float _cameraZoomOutStepPower = 7.5f;
-    [Range(0f, 100f)] [SerializeField] float _cameraZoomMinimalHeight = 5f;
-    [Range(0f, 100f)] [SerializeField] float _cameraZoomMaximalHeight = 50f;
+    [Range(0f, 250f)] [SerializeField] float _cameraZoomMinimalHeight = 5f;
+    [Range(0f, 250f)] [SerializeField] float _cameraZoomMaximalHeight = 150;
     [Range(0f, 25f)] [SerializeField] float _cameraZoomSpeed = 2f;
 
     // Screen edge movement

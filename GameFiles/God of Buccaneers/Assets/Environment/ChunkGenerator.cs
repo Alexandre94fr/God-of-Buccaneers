@@ -156,7 +156,8 @@ public static class ChunkGenerator
         else
             perlinHeight *= heightMultiplier * (1 - GetNormalizedDistanceFromIslandCenters(vertexWorldPosition, worldSpaceBetweenVertex, p_environmentOptions, p_islandCenterWorldPositions));
 
-        perlinHeight = Mathf.RoundToInt(perlinHeight);
+        if (p_environmentOptions.IsTerrainSmoothed)
+            perlinHeight = Mathf.RoundToInt(perlinHeight);
 
         return perlinHeight;
     }

@@ -278,7 +278,7 @@ MonoBehaviour:
   _cameraZoomInStepPower: 15
   _cameraZoomOutStepPower: 15
   _cameraZoomMinimalHeight: 15
-  _cameraZoomMaximalHeight: 100
+  _cameraZoomMaximalHeight: 150
   _cameraZoomSpeed: 3
   _isScreenEgdeCameraMovementEnable: 1
   _edgeDetectionToleranceFactor: 0.05

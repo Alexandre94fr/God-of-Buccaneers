@@ -59,6 +59,7 @@ MonoBehaviour:
     NumberOfChunks: {x: 10, y: 10}
     IsIsland: 1
     HasWater: 1
+    IsTerrainSmoothed: 1
     EnvironmentEdgeFactor: 0.1
     IslandNumber: 4
     IslandSizeFactor: 0.15
